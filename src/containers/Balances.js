@@ -18,26 +18,36 @@ const styles = StyleSheet.create({
 })
 
 type Props = {
-    movies: Array<*>,
-    onMoviesRequest: typeof onMoviesRequest,
-    navigation: any,
+    currencies: [
+        {name: 'Bitcon', price: number},
+        {name: 'Ethereum', price: number},
+        {name: 'Ripple', price: number},
+        {name: 'Bitcoin Cash', price: number},
+        {name: 'EOS', price: number},
+        {name: 'Cardano', price: number},
+        {name: 'Litecoin', price: number},
+        {name: 'Tron', price: number},
+        {name: 'Tether', price: number},
+        {name: 'NEO', price: number}
+    ],
+    onMoviesRequest: typeof onPriceRequest,
+    navigation: any
 }
 
 state = {
-    currenciesList: {},
 }
 
 
 class RootContainer extends React.PureComponent<Props> {
-    static navigationOptions = { title: "Home" }
+    static navigationOptions = { title: "Balances" }
 
-    navigate = movieId => {
+    navigate = currencyId => {
         const { navigation } = this.props
-        navigation.navigate("Market", { movieId })
+        navigation.navigate("Market", { currencyId })
     }
 
     render() {
-        const { movies, onMoviesRequest } = this.props
+        const { currencies, onPriceRequest } = this.props
         return (
             <SafeAreaView style={styles.container}>
                 <FlatList
@@ -59,7 +69,7 @@ class RootContainer extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = state => ({
-    movies: state.movies.items,
+    currencies: state.currencies.items,
     loading: state.movies.loading,
 })
 

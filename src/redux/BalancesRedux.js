@@ -1,3 +1,4 @@
+//@flow
 import { from } from "rxjs"
 import { filter, switchMap, flatMap } from "rxjs/operators"
 
@@ -6,16 +7,27 @@ import { getPrice } from "../services/api"
 
 export const initialState = {
     loading: false,
-    items: [],
+    items: [
+        {name: 'Bitcon', price: number},
+        {name: 'Ethereum', price: number},
+        {name: 'Ripple', price: number},
+        {name: 'Bitcoin Cash', price: number},
+        {name: 'EOS', price: number},
+        {name: 'Cardano', price: number},
+        {name: 'Litecoin', price: number},
+        {name: 'Tron', price: number},
+        {name: 'Tether', price: number},
+        {name: 'NEO', price: number}
+    ],
     error: null,
 }
 
 export const onPriceRequest = () => ({
     type: "ON_PRICE_REQUEST",
 })
-export const onPriceSuccess = movies => ({
+export const onPriceSuccess = prices => ({
     type: "ON_PRICE_SUCCESS",
-    movies,
+    prices,
 })
 export const onPriceFail = error => ({
     type: "ON_PRICE_FAIL",
@@ -33,7 +45,7 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                items: action.movies.results,
+                items: action.prices.results,
             }
         case "ON_PRICE_FAIL":
             return {
@@ -46,12 +58,12 @@ export const reducer = (state = initialState, action) => {
     }
 }
 
-export const moviesRequestEpic = action$ =>
+export const pricesRequestEpic = action$ =>
     action$.pipe(
         filter(action => action.type === "ON_PRICE_REQUEST"),
         switchMap(() =>
             from(getPrice()).pipe(
-                flatMap(response => from([onMoviesSuccess(response.data)])),
+                flatMap(response => from([onPriceSuccess(response.data)])),
             ),
         ),
     )
